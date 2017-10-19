@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration name="logConfiguration" status="WARN" strict="TRUE" monitorInterval="5"
+               packages="com.codahale.metrics.log4j2">
+
+    <properties>
+        <property name="entryPattern">%d{ISO8601} %-5p [%c{1.}][%t] (%F:%L) - %m%n%throwable</property>
+        <property name="fileSize">100 MB</property>
+        <property name="fileCount">10</property>
+        <property name="fileBase">logs/application</property>
+        <property name="fileName">${fileBase}.log</property>
+        <property name="rollingFileName">${fileBase}-%d{yyyyMMdd}-%i.log</property>
+    </properties>
+
+    <appenders>
+        <appender name="consoleAppender" type="Console">
+            <layout type="PatternLayout" pattern="${entryPattern}"/>
+        </appender>
+        <appender name="applicationAppender" type="RollingFile" fileName="${fileName}" filePattern="${rollingFileName}"
+                  append="true">
+            <layout type="PatternLayout" pattern="${entryPattern}"/>
+            <Policies>
+                <OnStartupTriggeringPolicy/>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="${fileSize}"/>
+            </Policies>
+            <DefaultRolloverStrategy max="${fileCount}"/>
+        </appender>
+        <appender name="log4j2" registryName="shared-metrics-registry" type="MetricsAppender"/>
+    </appenders>
+
+    <loggers>
+        <root level="info">
+            <appender-ref ref="consoleAppender"/>
+            <appender-ref ref="applicationAppender"/>
+            <appender-ref ref="log4j2"/>
+        </root>
+    </loggers>
+
+</configuration>

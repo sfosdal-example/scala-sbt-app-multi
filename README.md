@@ -1,4 +1,4 @@
-# Scala/Sbt Example Application
+# Scala/Sbt Example Multi-Project Application
 
 ## Includes Suggested Classes/Settings For:
 
